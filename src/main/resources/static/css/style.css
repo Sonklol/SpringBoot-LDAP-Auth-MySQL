@@ -1,0 +1,13 @@
+/* BODY */
+body {
+    background-image: url("https://as01.epimg.net/img/especiales/futbol/2022/mundial/apertura.jpg");
+    background-position-x: 100px;
+    background-position-y: 65px;
+}
+
+
+/* TEXTOS */
+h1 {
+    text-align: center;
+    font-family:Helvetica,Futura,Arial,Verdana,sans-serif;
+}

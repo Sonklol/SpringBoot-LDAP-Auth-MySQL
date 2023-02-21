@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.asir.qatar.dao.JugadoresDao">
+
+    <resultMap id="resultadoJugadores" type="JugadoresBean">
+        <id column="idJugador" property="idJugador" jdbcType="INTEGER" />
+        <result column="nombreJugador" property="jugador" jdbcType="VARCHAR" />
+        <result column="fechaNac" property="fechaNacimiento" jdbcType="VARCHAR"/>
+        <result column="seleccion" property="seleccion" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="obtenerJugadores" resultMap="resultadoJugadores" >
+        SELECT j.idJugador, 
+                j.jugador AS 'nombreJugador', 
+                DATE_FORMAT(j.fechaNacimiento, "%d/%m/%Y") AS fechaNac,
+                s.seleccion
+        FROM jugadores j
+        LEFT JOIN selecciones s
+            ON j.codSeleccion = s.idSeleccion
+        ORDER BY j.fechaNacimiento
+    </select>
+
+
+    <select id="datosJugador" resultMap="resultadoJugadores">
+        SELECT j.idJugador, 
+                j.jugador AS 'nombreJugador', 
+                DATE_FORMAT(j.fechaNacimiento, "%d/%m/%Y") AS fechaNac,
+                s.seleccion
+        FROM jugadores j
+        LEFT JOIN selecciones s
+            ON j.codSeleccion = s.idSeleccion
+        WHERE j.idJugador = "${idJugador}"
+    </select>
+
+    <update id="modificarJugador">
+        UPDATE jugadores
+        SET jugador = "${jugador}"
+        WHERE idJugador = "${idJugador}"
+    </update>
+
+    <delete id="eliminarJugador">
+        DELETE FROM Jugadores WHERE idJugador = ${idJugador}
+    </delete>
+
+    <select id="obtenerID" resultType="INTEGER">
+        SELECT IFNULL(MAX(idJugador), 0) + 1 FROM jugadores
+    </select>
+
+    <insert id="anadirJugador">
+        INSERT INTO jugadores (idJugador, jugador, fechaNacimiento, equipo, codSeleccion)
+            VALUES
+            (${idJugador}, '${jugador}',
+            STR_TO_DATE('${fechaNacimiento}', '%d/%m/%Y'),
+            '${equipo}', '${seleccion}'
+        )
+    </insert>
+</mapper>
